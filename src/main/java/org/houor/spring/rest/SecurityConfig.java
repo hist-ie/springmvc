@@ -2,7 +2,6 @@ package org.houor.spring.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -18,9 +17,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		// http.authorizeRequests().anyRequest().authenticated().and().formLogin().and().httpBasic();
-		http.formLogin().and().authorizeRequests().antMatchers("/spitters/me").authenticated().antMatchers(HttpMethod.POST, "/spittles")
-				.hasRole("ADMIN").anyRequest().permitAll();
+		http.
+		formLogin().loginPage("/login").
+		and().
+		logout().logoutSuccessUrl("/").logoutUrl("/").
+		and().
+		rememberMe().tokenValiditySeconds(60).key("restKey").
+		and().
+		httpBasic().realmName("rest").
+		and().
+		authorizeRequests().
+		antMatchers("/").permitAll().
+		antMatchers("/login").permitAll().
+		antMatchers("/logout").permitAll().
+		anyRequest().authenticated();
 	}
 
 	@Override
