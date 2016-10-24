@@ -27,7 +27,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		httpBasic().realmName("rest").
 		and().
 		authorizeRequests().
-		antMatchers("/").permitAll().
 		antMatchers("/login").permitAll().
 		antMatchers("/logout").permitAll().
 		anyRequest().authenticated();
